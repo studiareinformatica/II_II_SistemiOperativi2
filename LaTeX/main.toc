@@ -1,9 +1,0 @@
-\select@language {italian}
-\select@language {italian}
-\contentsline {chapter}{\numberline {1}Introduzione alla Shell}{2}
-\contentsline {section}{\numberline {1.1}Cenni}{2}
-\contentsline {section}{\numberline {1.2}Comandi essenziali}{2}
-\contentsline {section}{\numberline {1.3}Utenti}{3}
-\contentsline {section}{\numberline {1.4}FileSystem}{4}
-\contentsline {section}{\numberline {1.5}File}{6}
-\contentsline {section}{\numberline {1.6}Permessi}{6}
