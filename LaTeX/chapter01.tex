@@ -1,0 +1,191 @@
+\section{Cenni}
+La shell bash contiene una \textit{history}. Atrtaverso di essa è possibile visitare tutti i comandi digitati. Con i tasti cursore è possibile invece navigare nei comandi.
+Digitando \textit{CTRL+R} è possibile eseguire una sorta di query tra i comandi listati nella history.
+La Shell essenzialmente attende che l'utente digiti un comando (per questo viene spesso chiamata \textit{prompt}).
+Il simbolo \textit{\~} indica la \textit{home directory}.
+
+\section{Comandi essenziali}
+\begin{itemize}
+    \item \textbf{man [sezione] comando}: dà informazioni complete su un comando, includendone la sintassi, la descrizione, gli esempi e una larga documentazione.
+    \item \textbf{cd path}: varia la \textit{current working directory} attualmente in uso nella shell. Nel caso in cui path è \textit{..}, la \textit{pwd} varia nella directory precedente alla attuale. Il path \textit{.} indica la directory attuale.
+    \item \textbf{pwd}: indica la directory sulla quale quali si è posizionati all'interno della shell (\textit{current working directory}).
+    \item \textbf{ls [opzioni] [path]}: mostra il contenuto di una certa directory \textit{path} (se non specificata, sottintende che sia la \textit{pwd}). Tra le opzioni più importanti:
+    \begin{itemize}
+        \item \textit{-a}: visualizza i file nascosti (in Unix convenzionalmente i file nascosti iniziano con \textit{.} ).
+        \item \textit{-R}: applica il comando ricorsivamente.
+    \end{itemize}
+    \item \textbf{mkdir [opzioni] [path]}: crea una directory \textit{path}. Tra le opzioni più importanti:
+    \begin{itemize}
+        \item \textit{-p}: crea tutte le super-directory necessarie alla creazione della directory che si intende creare.
+    \end{itemize}
+    \item \textbf{touch file}: crea il file \textit{file}.
+    \item \textbf{tree [opzioni] [path]}: mostra l'albero delle directory contenute in \textit{path} (se non specificata, sottintende che sia la \textit{pwd}).
+    \item \textbf{mount [opzioni] [partizione puntodimount]}: se non viene passato alcun parametro, stampa la mappa di mount attualmente in uso. Se passati \textit{partizione} e \textit{puntodimount}, monta la partizione \textit{partizione} sulla path \textit{puntodimount}, rilevando automanticamente il filesystem utilizzato. Tra le opzioni più importanti:
+    \begin{itemize}
+        \item \textit{-t tipofilesystem}: specifica il filesystem (\textit{ext4}, \textit{ext3}, \textit{ntfs}, \textit{hfs}, \textit{nfs}, e così via \ldots) da utilizzare nel mount della \textit{partizione} specificata.
+    \end{itemize}
+    \item \textbf{cat [file] [\textgreater/\textgreater\textgreater outfile]}: stampa a video il contenuto del \textit{file}. Se non viene passato in input il \textit{file}, aspetta l'arrivo di uno \textit{stdin} (\textit{standard input} e lo stampa, fino a che non viene segnalato l'\textit{EOF} (\textit{end-of-file}). Può far uso di opzioni particolari:
+    \begin{itemize}
+        \item \textit{\textgreater}: reindirizza lo \textit{stdout} (\textit{standard output}) rimpiazzandolo al contenuto del file \textit{outfile}.
+        \item \textit{\textgreater\textgreater}: reindirizza lo \textit{stdout} aggiungendolo in coda al file \textit{outfile}.
+    \end{itemize}
+    \item \textbf{stat file}: stampa le diverse informazioni dell'\textit{inode} relativo al file \textit{file}.
+    \item \textbf{chmod [opzioni] permessi file}: modifica i permessi sul file \textit{file}, applicando quelli specificati in \textit{permessi} (attraverso combinazioni alfabetiche o ottali). Tra le opzioni più importanti:
+    \begin{itemize}
+        \item \textit{-R}: applica il cambiamento dei permessi ricorsivamente (nel caso in cui \textit{file} sia una directory.
+    \end{itemize}
+\end{itemize}
+
+\section{Utenti}
+Dopo l'installazione di un OS è sempre necessario configurare un utente.
+Ogni utente appartiene sempre almeno ad un gruppo.
+Per ottenere i gruppi di cui fa parte l'utente che utilzza la shell, si utilizza il comando:
+\begin{lstlisting}
+groups
+\end{lstlisting}
+Invece, per ottenere i gruppi di cui fa parte l'utente generico \textit{utente}:
+\begin{lstlisting}
+groups utente
+\end{lstlisting}
+Un gruppo importante è \textit{sudo}.
+\textit{sudo} è un comando che accetta comandi da elevare a privilegiati.
+Per cambiare utente da shell occorre eseguire il comando:
+\begin{lstlisting}
+su -l utente
+\end{lstlisting}
+Per aggiungere un utente ad un gruppo, occorre utilizzare il comando:
+\begin{lstlisting}
+useradd utente gruppo
+\end{lstlisting}
+Un file importante in questo ambito è \textit{/etc/passwd}, che contiene diverse informazioni sull'utente separate da \textit{:} o \textit{,} . Le informazioni sono:
+\begin{itemize}
+    \item Username
+    \item Password (cifrata e gestita in un altro file - \textit{/etc/shadow})
+    \item \textit{UID} (\textit{User ID})
+    \item \textit{GID} (\textit{Group ID})
+    \item Path della home directory
+    \item Nome della shell associata all'utente
+\end{itemize}
+Analogamente, il file \textit{/etc/groups} contiene le informazioni relative ai gruppi:
+\begin{itemize}
+    \item Nome gruppo
+    \item \textit{GID}
+    \item \textit{UID} - separati da \textit{,} - degli utenti membri del gruppo
+\end{itemize}
+
+\section{FileSystem}
+Tutti i file e le directory sono contenuti direttamente o indirettamente nella directory di root, con la struttura di un albero.
+Le foglie di questo albero sono:
+\begin{itemize}
+    \item Directory vuote
+    \item File
+\end{itemize}
+All'interno di una directory non ci possono essere elementi con lo stesso nome (la differenza di \textit{case} rende i nomi diversi).
+Il \textit{path assoluto}, quindi una cosa fatta così indica il percorso totale per raggiungere il dato elemento all'interno dell'albero del filesystem (sostanzialmente una sequenza di directory separate da \textit{/}). Quello \textit{relativo} invece è la serie delle sole directory - separate da \textit{/} - necessarie per arrivare all'elemento desiderato a partire dalla \textit{current working directory}.
+Il Filesystem di Linux è unico, contenuto interamente in \textit{/} (Windows si divide in volumi).
+Ciononostante, può contenere elementi eterogenei:
+\begin{itemize}
+    \item Dischi fisici
+    \item Filesystem virtuali
+    \item Filesystem di rete
+    \item Filesystem in memoria principale (\textit{RAM})
+\end{itemize}
+Questo è possibile tramite il comando \textit{mount}.
+Per esempio, \textit{/proc} contiene informazioni su tutti i processi attualmente in esecuzione, attraverso i loro  \textit{PID}. Questa path è virtuale - non fisica - e viene montata automaticamente dal kernel all'avvio dell'OS. Ciascuna di queste directory contiene un file \textit{status} che contiene informazioni sensibili:
+\begin{itemize}
+    \item Nome del processo
+    \item \textit{PID} del processo
+    \item \textit{PID} del processo padre
+    \item Così via \ldots
+\end{itemize}
+Solitamente il disco principale, sul quale viene installato l'OS è montato in \textit{/}.
+Nei casi in cui ci sia un solo disco, è possibile partizionarlo in più parti, montandole ciascuna in un punto di mount differente. Partizionare un disco può molto spesso voler dire eliminare definitivamente i dati precendemente allocati. Esistono diversi programmi per gestire il partizionamento dei disci (come \textit{parted}, \textit{gparted}, \textit{fdisk}, e così via \ldots).
+Tra i file importanti in questo ambito:
+\begin{itemize}
+    \item \textit{/etc/mtab}: equivalente dell'output del comando \textit{mount} (mostra i punti di mount attualmente in uso)
+    \item \textit{/etc/fstab}: specifica le partizioni (o i dischi) da montare all'avvio dell'OS, con annesso il relativo punto di mount e filesystem.
+\end{itemize}
+
+Lo schema generico del filesystem è il seguente:
+
+\begin{center}
+	\begin{tabular}{| c | c | c |}
+		\hline
+		\textbf{Dimensione}& \textbf{Spiegazione} & \textbf{Montata} \\ \hline
+		/boot & Kernel e file di boot & NO \\
+		\hline
+		/bin & Binari (programmi eseguibili) di base & NO \\ 
+		\hline
+		/dev & Devices (periferiche) hardware e virtuali & boot \\ 
+		\hline
+		/etc & File di congurazione di sistema & NO \\
+		\hline
+		/proc & Dati e statistiche dei processi e parametri del kernel & boot \\
+		\hline
+		/sys & Informazioni e statistiche di device di sistema & boot \\
+		\hline
+		/media & Mountpoint per device di I/O (es:  CD, DVD, USB pen) & quando necessario \\
+		\hline
+		/mnt & (come /media) & quando necessario \\
+		\hline
+		/sbin & Binari di sistema & NO \\
+		\hline
+		/var & File variabili (log le, code di stampa, mail ...) & NO \\
+		\hline
+		/tmp & File temporanei & NO \\
+		\hline
+		/lib & Librerie & NO \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\section{File}
+Ad ogni file del filesystem è associato un numero identificativo che ne indica l'\textit{inode}, una struttura dati contenente informazioni specifiche al file stesso:
+
+\begin{center}
+	\begin{tabular}{|c|p{10cm}|}
+		\hline
+		\textbf{Attributo} & \textbf{Spiegazione} \\ \hline
+		Type & Tipo del file \\ \hline
+		User ID & ID del proprietario \\ \hline
+		Group ID & ID del gruppo associato \\ \hline
+		Mode & Permessi di accesso per il proprietario, il gruppo e tutti gli altri \\ \hline
+		Size & Dimensione in byte del file \\ \hline
+		Timestamps & \begin{itemize}
+			\item ctime (inode changing time: cambiamento di un attributo)
+			\item mtime (content modification time: solo scrittura)
+			\item atime (content access time: anche lettura)
+		\end{itemize} \\ \hline
+		Link count & numero di hard links \\ \hline
+		Data pointers & Puntatore alla lista di blocchi che compongono il file \\ \hline	
+	\end{tabular}
+\end{center}
+
+Ciascuna di queste informazioni possono essere visualizzate tramite apposite opzioni del comando \textit{ls}.
+
+\section{Permessi}
+Ad ogni \textit{inode} è associato un sistema che ne gestisce i permessi. I permessi sono di \textit{lettura}, \textit{scrittura} ed \textit{esecuzione}. Nell'applicazione dell'impostazione dei permessi si può specificare il permesso tramite la lettera alfabetica (\textit{r}, \textit{w} o \textit{x}) o il valore ottale (\textit{r} vale 4, \textit{w} vale 2 e \textit{x} vale 1: le varie combinazioni della somma dei vari valori compone i permessi associati al file) associati ad esso.
+Per modificare i permessi di un file si usa il comando \textit{chmod}.
+
+\begin{center}
+	\begin{tabular}{|c|c|p{10cm}|} 
+		\hline
+		Permesso & Ottale & Significato \\ \hline
+		--- & 0 & Non si può fare niente \\ \hline
+		--x & 1 & Si  può settare  come  cwd;  si  può anche  "attraversare",  se  già se
+		ne conosce il contenuto (ad esempio, si può leggere un le o una
+		directory al suo interno, se i permessi di questi ultimi contengono
+		la lettura) \\ \hline
+		-w- & 2 & Non si può fare niente (per fare veramente modiche, occorrono i
+		permessi di esecuzione) \\ \hline
+		-wx & 3 & Come  il  permesso  7,  ma  non  si  può listare  il  contenuto  (con  o
+		senza attributi) \\ \hline
+		r-- & 4 & Si  può solo  listarne  il  contenuto,  ma  senza  vedere  gli  attributi
+		dei le/directories contenuti (l'unica cosa che si può sapere è se si
+		tratta di le o di directory); non può essere "attraversata"\\ \hline		
+		r-x & 5 & Si può leggere (attributi compresi), settare come cwd ed attraver-
+		sare; non è possibile cancellare o aggiungere file/directory \\ \hline
+		rw- & 6 & Come il permesso 4 (write senza execute è inutile) \\ \hline
+		rwx & 7 & Si può fare tutto: listare contenuto (attributi compresi), aggiungere le directory, cancellare le contenuti in essa (anche senza avere il permesso di scrittura sul file! correggibile con lo sticky bit, vedere più avanti), cancellare directory contenute in essa (ma occorrono tutti i permessi su tali directory) \\ \hline
+	\end{tabular}
+\end{center}
