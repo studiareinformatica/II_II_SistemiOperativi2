@@ -118,7 +118,7 @@ Lo schema generico del filesystem è il seguente:
 		\hline
 		/dev & Devices (periferiche) hardware e virtuali & boot \\ 
 		\hline
-		/etc & File di congurazione di sistema & NO \\
+		/etc & File di configurazione di sistema & NO \\
 		\hline
 		/proc & Dati e statistiche dei processi e parametri del kernel & boot \\
 		\hline
@@ -130,7 +130,7 @@ Lo schema generico del filesystem è il seguente:
 		\hline
 		/sbin & Binari di sistema & NO \\
 		\hline
-		/var & File variabili (log le, code di stampa, mail ...) & NO \\
+		/var & File variabili (log file, code di stampa, mail ...) & NO \\
 		\hline
 		/tmp & File temporanei & NO \\
 		\hline
@@ -173,7 +173,7 @@ Per modificare i permessi di un file si usa il comando \textit{chmod}.
 		Permesso & Ottale & Significato \\ \hline
 		--- & 0 & Non si può fare niente \\ \hline
 		--x & 1 & Si  può settare  come  cwd;  si  può anche  "attraversare",  se  già se
-		ne conosce il contenuto (ad esempio, si può leggere un le o una
+		ne conosce il contenuto (ad esempio, si può leggere un file o una
 		directory al suo interno, se i permessi di questi ultimi contengono
 		la lettura) \\ \hline
 		-w- & 2 & Non si può fare niente (per fare veramente modiche, occorrono i
@@ -181,10 +181,10 @@ Per modificare i permessi di un file si usa il comando \textit{chmod}.
 		-wx & 3 & Come  il  permesso  7,  ma  non  si  può listare  il  contenuto  (con  o
 		senza attributi) \\ \hline
 		r-- & 4 & Si  può solo  listarne  il  contenuto,  ma  senza  vedere  gli  attributi
-		dei le/directories contenuti (l'unica cosa che si può sapere è se si
-		tratta di le o di directory); non può essere "attraversata"\\ \hline		
+		dei file/directories contenuti (l'unica cosa che si può sapere è se si
+		tratta di file o di directory); non può essere "attraversata"\\ \hline		
 		r-x & 5 & Si può leggere (attributi compresi), settare come cwd ed attraver-
-		sare; non è possibile cancellare o aggiungere file/directory \\ \hline
+		sare; non è possibile cancellare o aggiungere file/directory \\ \hline
 		rw- & 6 & Come il permesso 4 (write senza execute è inutile) \\ \hline
 		rwx & 7 & Si può fare tutto: listare contenuto (attributi compresi), aggiungere le directory, cancellare le contenuti in essa (anche senza avere il permesso di scrittura sul file! correggibile con lo sticky bit, vedere più avanti), cancellare directory contenute in essa (ma occorrono tutti i permessi su tali directory) \\ \hline
 	\end{tabular}
