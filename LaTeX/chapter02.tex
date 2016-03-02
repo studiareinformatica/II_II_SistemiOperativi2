@@ -12,4 +12,21 @@ Di seguito i principali tipi di \textit{filesystem} di un sistema \textit{Linux}
 \end{center}
 
 \section{Partizionamento}
-%missing%
+Per creare una semplicissima partizione, possiamo creare un file di 10MB (10 blocchi da 1MB), composto da soli \textit{0}:
+\begin{lstlisting}
+dd if=/dev/zero of=file bs=1M count=10
+\end{lstlisting}
+A questo punto imponiamo al nuovo file \textit{file} un filesystem, ulilizzando il comando \textit{mkfs}:
+\begin{lstlisting}
+mkfs -t ext4 file
+\end{lstlisting}
+Possiamo ora montare questo filesystem fisicamente:
+\begin{lstlisting}
+mount -t ext4 file /punto/di/mount
+\end{lstlisting}
+Nella directory \textit{/punto/di/mount} avremo la nostra partizione (al momento vuota), appena formattata, di una capienza massima di 100MB.
+Qualsiasi file spostato nella directory \textit{/punto/di/mount} sarà persistito e gestito dal filesystem delegato, fino a che il device sarà montato. \\
+Per smontare la partizione:
+\begin{lstlisting}
+umount /punto/di/mount
+\end{lstlisting}

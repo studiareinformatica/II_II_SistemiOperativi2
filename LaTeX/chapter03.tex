@@ -1,0 +1,101 @@
+\section{Accenni}
+Un Sistema Operativo è composto - oltre che da file -, da processi che vengono eseguiti.
+Ciascun file \textit{eseguibile} - se ben strutturato e adeguatamente programmato - può diventare un processo in esecuzione.
+Mentre qualsiasi tipo di script/comando costituisce un processo a sé stante, esistono alcuni comandi - detti comandi \textit{built-in} - , come \textit{echo} o \textit{cd}, per esempio, che non generano processo.
+Se un OS è \textit{multi-processo} (\textit{multitasking}) non è necessario attendere che un processo termini per lanciarne un altro.
+Ciascun processo è identificato da un numero, il \textit{PID} (\textit{Process IDentifier}): questo rappresenterà uno e soltanto un processo. Il \textit{PID} rimane "occupato" fino a che il processo non terminerà: a quel punto, sarà di nuovo fruibile.
+Ogni processo è rappresentato in memoria da:
+\begin{itemize}
+    \item Una struttura in \textit{RAM} mantenuta dal kernel e denominata \textit{PCB} (\textit{Process Control Block}:
+    \begin{itemize}
+        \item \textbf{PID}: \textit{Process Identifier}
+        \item \textbf{PPID}: \textit{Parent Process Identifier}
+        \item \textbf{Real UID}: \textit{Real User Identifier}, l'utente che ha lanciato il processo
+        \item \textbf{Real GID}: \textit{Real Group Identifier}, il gruppo che ha lanciato il processo
+        \item \textbf{Effective UID}: \textit{Effective User Identifier}, l'utente proprietario effettivo del processo (diverso dal \textit{real} soltanto se configurato lo \textit{sticky bit})
+        \item \textbf{Effective GID}: \textit{Effective Group Identifier}, il gruppo proprietario effettivo del processo (diverso dal \textit{real} soltanto se configurato lo \textit{sticky bit})
+        \item \textbf{Saved UID}: \textit{Saved User Identifier}
+        \item \textbf{Saved GID}: \textit{Saved Group Identifier}
+        \item \textbf{CWD}: \textit{Current Working Directory}, directory di lavoro corrente
+        \item \textbf{Umask}: \textit{file mode creation mask}
+        \item \textbf{Nice}: \textit{priorità} statica del processo
+    \end{itemize}
+    \item Cinque aree di memoria (eventualmente \textit{swappate} su memoria virtuale:
+    \begin{itemize}
+        \item \textbf{Text Segment}: istruzioni da eseguire
+        \item \textbf{Data Segment}: i dati \textit{statici}, le variabili inizializzate e costanti di ambiente
+        \item \textbf{BSS}: \textit{Block Started from Symbol} dati \textit{statici} non inizializzati, distinti dal \textit{data segment} per motivi di realizzazione hardware
+        \item \textbf{Heap}: i dati \textit{dinamici} (allocati con \textit{malloc} o simili)
+        \item \textbf{Stack}: chiamate a funzioni, con corrispondenti dati \textit{dinamici}
+    \end{itemize}
+\end{itemize}
+Ad ogni processo corrisponde inoltre uno stato (o meglio, \textit{modalità}):
+\begin{itemize}
+    \item \textbf{Running}: in esecuzione
+    \item \textbf{Runnable}: pronto per essere (ri)eseguito
+    \item \textbf{Sleeping}: in attesa di qualche evento (come la lettura di blocchi su disco), prima di poter essere scelto dallo \textit{scheduler}
+    \item \textbf{Zombie}: terminato, le sue aree di memoria non sono più in memoria, ma il \textit{PCB} permane perché il processo padre non ne ha richiesto l'\textit{exit}
+    \item \textbf{Stopped}: un tipo particolare di \textit{sleeping}, che rimane in questo stato fino a che non riceve un segnale \textit{cont}
+    \item \textbf{Traced}: in esecuzione di backup (o altro caso particolare di \textit{sleeping})
+    \item \textbf{Uninterruptible sleep}: come lo \textit{sleeping}, ma tipicamente mentre esegue operazioni su disco e non può essere ucciso
+\end{itemize}
+
+Per lanciare un processo in background si utilizza l'\textit{umpersand} (\textit{\&}) in coda al comando.
+Questo concetto è legato strettamente al concetto di \textit{job}.
+
+\section{Job}
+Il \textit{job} è un particolare tipo di processo che detiene due modalità:
+\begin{itemize}
+    \item \textbf{foreground}: il comando può leggere input da tastiera e scrivere a schermo. Fino a che non termina, il prompt non viene restituito e non si possono eseguire altri comandi;
+    \item \textbf{background}: il comando non è \textit{detouched} dalla shell, per cui l'utente non può interagirci, che ha quindi il controllo del prompt. Il processo può però scrivere su schermo. Per eseguire \textit{job} in background - come già accennato - basterà inserire l'\textit{ampersand} (\textit{\&}) in coda al comando.
+\end{itemize}
+Per visualizzare gli jobs in background, basta eseguire il comando:
+\begin{lstlisting}
+jobs
+\end{lstlisting}
+Se accompagnato dalla flag \textit{-l}, mostra anche il \textit{PID} associato al processo (se un job è costituito da più comandi in \textit{pipelining}, mostrerà tutti quelli coinvolti).
+Da shell, se un job è in foreground, basta premere \textit{CTRL+Z} per metterlo in \textit{sleep} e poi eseguire:
+\begin{lstlisting}
+bg
+\end{lstlisting}
+per metterlo in background.
+Analogamente, se eseguo poi:
+\begin{lstlisting}
+fg
+\end{lstlisting}
+lo riporto in foreground.
+Se accompagno \textit{fg} o \textit{bg} con \textit{\%n} - dove \textit{n} è il numero del job - questi vengono applicati direttamente sul job associato al numero \textit{n}.
+Invece, utilizzando \textit{\%prefix}, seleziono automaticamente il job che inizia con la stringa \textit{prefix}.
+Infine, \textit{\%+} o \textit{\%\%} selezionano l'ultimo job lanciato; \textit{\%-} il penultimo.
+
+\section{Comandi utili}
+
+\subsection{ps}
+\textit{ps} è un comando molto utile per la gestione dei processi.
+Mostra in output i processi attualmente in esecuzione, insieme con - se esplicitamente richiesto tramite le opzioni - diverse informazioni ad essi relative.
+
+\subsection{top}
+\textit{top} è un comando - simile a \textit{ps} - che mostra \textit{interattivamente} e con refresh periodico - la tabella dei processi in esecuzione, insieme con statistiche sulla \textit{load average}, l'utilizzo della \textit{CPU}, della \textit{RAM} e della \textit{SWAP}, e diverse altre informazioni utili.
+
+\subsection{kill}
+\textit{kill} può essere utilizzato per \textit{uccidere} processi in esecuzione - praticamente in tutti gli stati possibili -, ma in realtà è un "lanciatore" di \textit{signals}.
+Prende in input il \textit{PID} del processo da uccidere. \\
+Se specificata la flag \textit{-l} mostra tutti i possibili segnali da lanciare. \\
+Eseguendo il comando:
+\begin{lstlisting}
+kill -9 2617
+\end{lstlisting}
+invio il segnale \textit{SIGKILL} al processo con \textit{PID} \textit{2617}. 
+
+\subsection{nice}
+\textit{nice} utilizza due argomenti:
+\begin{itemize}
+    \item valore (positivo o negativo): valore di priorità da utilizzare
+    \item comando, al quale aggiungere (o diminuire, in base al valore del primo parametro) priorità
+\end{itemize}
+
+\subsection{renice}
+\textit{renice} è una versione di \textit{nice} applicabile su processi già in esecuzione, ed infatti richiede il suo \textit{PID} come argomento, in sostituzione del parametro di input \textit{comando}, nel caso di \textit{nice}.
+
+\subsection{strace}
+\textit{strace} mostra la \textit{stack trace} di un comando - richiesto come parametro di input. Alternativamente, può mostrare quella di un processo in esecuzione, tramite la flag \textit{-p} che richiede il \textit{PID} di tale processo.
