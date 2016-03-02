@@ -107,35 +107,22 @@ Tra i file importanti in questo ambito:
 \end{itemize}
 
 Lo schema generico del filesystem è il seguente:
-
 \begin{center}
 	\begin{tabular}{| c | c | c |}
 		\hline
 		\textbf{Dimensione}& \textbf{Spiegazione} & \textbf{Montata} \\ \hline
-		/boot & Kernel e file di boot & NO \\
-		\hline
-		/bin & Binari (programmi eseguibili) di base & NO \\ 
-		\hline
-		/dev & Devices (periferiche) hardware e virtuali & boot \\ 
-		\hline
-		/etc & File di configurazione di sistema & NO \\
-		\hline
-		/proc & Dati e statistiche dei processi e parametri del kernel & boot \\
-		\hline
-		/sys & Informazioni e statistiche di device di sistema & boot \\
-		\hline
-		/media & Mountpoint per device di I/O (es:  CD, DVD, USB pen) & quando necessario \\
-		\hline
-		/mnt & (come /media) & quando necessario \\
-		\hline
-		/sbin & Binari di sistema & NO \\
-		\hline
-		/var & File variabili (log file, code di stampa, mail ...) & NO \\
-		\hline
-		/tmp & File temporanei & NO \\
-		\hline
-		/lib & Librerie & NO \\
-		\hline
+		/boot & Kernel e file di boot & NO \\ \hline
+		/bin & Binari (programmi eseguibili) di base & NO \\ \hline
+		/dev & Devices (periferiche) hardware e virtuali & boot \\ \hline
+		/etc & File di configurazione di sistema & NO \\ \hline
+		/proc & Dati e statistiche dei processi e parametri del kernel & boot \\ \hline
+		/sys & Informazioni e statistiche di device di sistema & boot \\ \hline
+		/media & Mountpoint per device di I/O (es:  CD, DVD, USB pen) & quando necessario \\ \hline
+		/mnt & (come /media) & quando necessario \\ \hline
+		/sbin & Binari di sistema & NO \\ \hline
+		/var & File variabili (log file, code di stampa, mail ...) & NO \\ \hline
+		/tmp & File temporanei & NO \\ \hline
+		/lib & Librerie & NO \\ \hline
 	\end{tabular}
 \end{center}
 
@@ -176,7 +163,7 @@ Per modificare i permessi di un file si usa il comando \textit{chmod}.
 		ne conosce il contenuto (ad esempio, si può leggere un file o una
 		directory al suo interno, se i permessi di questi ultimi contengono
 		la lettura) \\ \hline
-		-w- & 2 & Non si può fare niente (per fare veramente modiche, occorrono i
+		-w- & 2 & Non si può fare niente (per fare veramente modifiche, occorrono i
 		permessi di esecuzione) \\ \hline
 		-wx & 3 & Come  il  permesso  7,  ma  non  si  può listare  il  contenuto  (con  o
 		senza attributi) \\ \hline
@@ -189,3 +176,16 @@ Per modificare i permessi di un file si usa il comando \textit{chmod}.
 		rwx & 7 & Si può fare tutto: listare contenuto (attributi compresi), aggiungere le directory, cancellare le contenuti in essa (anche senza avere il permesso di scrittura sul file! correggibile con lo sticky bit, vedere più avanti), cancellare directory contenute in essa (ma occorrono tutti i permessi su tali directory) \\ \hline
 	\end{tabular}
 \end{center}
+
+\section{Special attributes}
+\begin{itemize}
+    \item \textit{sticky bit} (t): attualmente inutile. Una volta, se applicato su un eseguibile, manteneva l'immagine del processo in memoria, anche dopo che era ordinato. Se invece applicato su una directory, corregge i permessi di scrittura+esecuzione, rendendone impossibile l'eliminazione;
+    \item \textit{setuid} o \textit{setgid} (s): applicabile solo agli eseguibili, che verranno eseguiti non con l'utente (o gruppo) che ne ha lanciato l'esecuzione, ma con l'utente (o gruppo) proprietario.
+\end{itemize}
+
+\section{umask}
+\textit{umask} è un comando della shell utilizzato per gestire i permessi da negare a ciascun file generato da un dato processo. Per cui eseguendo:
+\begin{lstlisting}
+umask 147
+\end{lstlisting}
+in una directory - che ha permessi 0666 -, andrò a decrementare i permessi da una situazione di partenza di 0666: il valore risultante sarà quindi 0620. Per questo, per ogni file creato in quella directory, questo non avrà permessi 0666 - come dettato dalla directory -, ma 0620 - come dettato dalla \textit{umask}.
