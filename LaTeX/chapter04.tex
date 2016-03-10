@@ -1,0 +1,192 @@
+Le espressioni regolari fanno parte dei linguaggi formali. Definiscono - come tutti i linguaggi formali - due informazioni fondamentali:la \textit{sintassi}, cioè la struttura grammaticale e sintattica di un'espressione regolare, e la \textit{semantica}, ossia le specifiche per la scrittura di ER ben formate.
+% cosa vuola dire \textit{scrivere bene} un'espressione regolare - che non soltanto rispetti le sue regole sintattiche.
+
+\section{Sintassi}
+Esistono due tipi di sintassi:
+\begin{itemize}
+	\item \textit{BRE}: più obsoleta, utilizzata da programmi vecchi;
+	\item \textit{ERE}: moderna (utilizzata da comandi come \textit{grep}, \textit{sed}, e così via \ldots).
+\end{itemize}
+\paragraph{BRE.} Un'espressione regolare è formata da caratteri stampabili. Seguendo guide apposite è possibile individuare come stampare anche caratteri non stampabili. Alcuni di questi sono speciali, chiamati pertanto \textit{metacaratteri} (o \textit{metacharacters}) e raccolgono: 
+\begin{lstlisting}
+	[, ], ., *, ^, $, \, <, >
+\end{lstlisting}
+
+\paragraph{ERE.} Raggruppa gli stessi \textit{metacaratteri} del \textit{BRE}, aggiungendo i seguenti: \textit{+}, \textit{?}, \textit{|}, \textit{(}, \textit{)}, \textit{\{}, \textit{\}}. 
+
+Per essere corretta, le parentesi tonde devono essere sempre ben bilanciate. Per quanto riguarda invece le parentesi graffe, queste possono essere usate soltanto contenendo valori numerici interi positivi, separati da \textit{virgole}. Infine, il \textit{backslash} può essere utilizzato anche così: $\textbackslash n$, dove \textit{n} è un numero intero positivo.
+
+\section{Semantica}
+\begin{center}
+	\textbf{BRE}\\
+	\begin{tabular}{|c|p{3cm}|p{10cm}|}
+	\hline
+		\textbf{Num} & \textbf{Caratteri} & \textbf{Semantica: \textit{con cosa fa pattern matching}} \\ \hline
+		1	& Letterale \textit{l}	& Solo \textit{l} \\ \hline
+		2	& .			& Qualsiasi singolo carattere \\ \hline
+		3	& [S], dove S è una \textit{concatenazione} di caratteri dove non compare -, oppure compare solo all'inizio o alla fine	& Uno qualsiasi dei caratteri in S; se il primo carattere è \^, allora uno qualsiasi dei caratteri \textit{non} in S. \\ \hline
+		4	& [R], dove R è un range $ l_{1} - l_{2} $	& Uno qualsiasi dei letterali compresi nel range, quindi una qualsiasi $ l_{1} \leq l \leq l_{2} $; se il primo carattere di R è \^, allora uno qualsiasi dei caratteri \textit{non} in R. \\ \hline
+		5	& $ [M] $, dove M è un misto di sequenze $ S_{1},\ldots,S_{n} $ e di range $ R_{1},\ldots,R_{k}	$ & Uno qualsiasi dei caratteri che fanno pattern matching con una sequenza $ S_{i} $o con un range $ R_{j} $. Alcuni di questi M sono predefiniti da \textit{POSIX}. \\ \hline
+		6	& $ [^M] $, dove M è come sopra	& Uno qualsiasi dei caratteri che non fanno pattern matching con alcuna sequenza $ S_{i} $ né con un range $ R_{j} $. \\ \hline
+		7	& *			& Si può fare pattern matching con la sottoespressione regolare immediatamente precedente per 0, 1 o più volte (consecutive); però, se si trova all'inizio di una \textit{BRE}, diventa un letterale. \\ \hline
+		8	& $ [^] $		&
+		 Si può fare pattern matching con la sottoespressione regolare immediatamente seguente solo se la stringa che fa pattern matching si trova all'inizio del testo. \\ \hline
+		9	& \$			& Si può fare pattern matching con la sottoespressione regolare immediatamente precedente solo se la tringa che fa pattern matching si trova alla fine del testo. \\ \hline
+		10	& <			& Si può fare pattern matching con la sottoespressione regolare immediatamente seguente solo se la stringa che fa pattern matching si trova all'inizio di una parola (ovvero, dopo di alcuni spazi). \\ \hline
+		11	& >			& Si può fare pattern matching con la sottoespressione regolare immediatamente precedente solo se la stringa che fa pattern matching si trova alla fine di una parola (ovvero, prima di alcuni spazi). \\ \hline
+		12	& \textbackslash	& Se seguito da un metacarattere, forza a considerarlo come se fosse un letterale. \\ \hline
+		13	& $E_{1}E_{2}$		& Si può fare pattern matching con una string che fa 
+		pattern matching con $ E_{1} $ , concatenata (ovvero, seguita immediatamente da una che fa pattern matching con $ E_{2} $) .\\
+		 
+		 \hline
+	\end{tabular}
+\end{center}
+\newpage
+\begin{center}
+	\textbf{Standard POSIX} \\
+	\begin{tabular}{|c|l|l|}
+	\hline
+		\textbf{Classe} & \textbf{Semantica: \textit{con cosa fa pattern matching}} \\ \hline
+		[:alnum:]	& Come la BRE A-Za-z0-9 \\ \hline
+		[:alpha:]	& Come la BRE A-Za-z \\ \hline
+		[:blank:]	& Spazio o tab \\ \hline
+		[:cntrl:]	& Caratteri di controllo \\ \hline
+		[:graph:]	& Caratteri stampabili ASCII 33-126 \\ \hline
+		[:lower:]	& Come la BRE a-z \\ \hline
+		[:print:]	& Tutti i caratteri stampabili \\ \hline
+		[:space:]	& Tutti i caratteri di spaziatura \\ \hline
+		[:xdigit:]	& Cifre esadecimali, come la BRE 0-9A-Fa-f \\ \hline
+		[:digit:]	& Cifre decimali, come la BRE 0-9 \\ \hline
+	\end{tabular}
+\end{center}
+
+\begin{center}
+	\textbf{ERE} \\
+	\begin{tabular}{|c|c|p{10cm}|}
+	\hline
+        \textbf{Num} & \textbf{Caratteri} & \textbf{Semantica: \textit{con cosa fa pattern matching}} \\ \hline
+		1	& +		& Si può fare pattern matching con la sottoespressione regolare immediatamente precedente per 1 o più volte (consecutive). \\ \hline
+		2	& ?		& Si può fare pattern matching con la sottoespressione regolare immediatamente precedente per 0 o 1 volta. \\ \hline
+		3	& l & va applicato a 2 espressioni regolari $ E_{1} $ ed $ E_{2} $(notazione infissa, quindi si scrive $ E_{1}|E_{2} $). Si può fare pattern matching con $ E_{1} $ o con $ E_{2} $. \\ \hline
+		4	& (E)		& Si può fare pattern matching con E: utile se occorre sovvertire le precedenze (nelle ERE, la concatenzazione ha la precedenza sul |) \\ \hline
+		5	& $ \backslash n $		& Esattamente la stessa sottostringa che ha fatto match con l'$ n $-esima sottoespressione regolare tra parentesi. \\ \hline
+		6	& {n}		& Si deve fare pattern matching con la sottoespressione regolare immediatamente precedente per esattamente \textit{n} volte (consecutive). \\ \hline
+		7	& {n,}		& Si deve fare pattern matching con la sottoespressione regolare immediatamente precedente per almeno \textit{n} volte (consecutive). \\ \hline
+		8	& {n,m}		& Si deve fare pattern matching con la sottoespressione regolare immediatamente precedente per almeno \textit{n} volte e per al più \textit{m} volte (consecutive). \\ \hline
+	\end{tabular}		
+\end{center}
+\newpage
+
+\section{Wildcarding}
+Espressioni regolari possono essere usate direttamente da Bash. Sono utilizzate direttamente dalla shell per specificare in modo compatto insiemi di file. Per esempio,
+\begin{lstlisting}
+	ls -l lezione*
+\end{lstlisting}
+restituisce in output tutti i file che iniziano con la stringa "lezione".
+Come per le BRE, sono utilizzati alcuni letterali ed alcuni metacaratteri.
+Notare che scrivere una stringa tra apici inibisce il tracciamento delle regEx.
+
+\begin{center}
+	\begin{tabular}{|c|p{4cm}|}
+	\hline
+		$ \backslash $	& fa diventare letterali i caratteri \\ \hline
+		'*'				& indica una qualsiasi sequenza di caratteri \\ \hline
+		? 			& indica un carattere qualsiasi \\ \hline
+		[]			& indica che il file deve iniziare con uno dei caratteri all'interno delle parentesi \\ \hline
+		[!]			& indica che il file \textit{non} deve iniziare con nessuno dei caratteri all'interno delle parentesi \\
+	\hline
+	\end{tabular}
+\end{center}
+
+\section{Comandi utili}
+\subsubsection{grep}
+\textit{grep} è un comando utilizzato per il \textit{pattern matching} tramite l'uso di \textit{espressioni regolari}.
+
+\subsubsection{less}
+\textit{less} legge il contenuto di un file tramite un'interfaccia utile attraverso cui è possibile navigare nel file in lettura.
+
+\subsubsection{clear}
+\textit{clear} ripulisce lo \textit{standard output} nella shell aperta.
+
+\subsubsection{echo}
+\textit{echo} stampa la stringa specificata in input.
+
+\subsubsection{cat}
+\textit{cat} stampa il file specificato in input.
+
+\subsubsection{od}
+\textit{od} fa il dump di un file specificato in input, ovvero ne mostra il contenuto in esadecimale.
+
+\subsubsection{head}
+\textit{head} legge le prime 10 righe di un file specificato in input, dando poi la possibilità di navigarlo. Specificando la flag \textit{-n} ed impostandola ad un valore numerico intero positivo \textit{x}, legge le prime \textit{x} righe.
+
+\subsubsection{tail}
+\textit{tail} è identico a \textit{head}, ma funziona all'opposto: legge le ultime \textit{n} righe del file specificato in input.
+
+\subsubsection{cmp}
+\textit{cmp} confronta due file specificati in input, mostrando la prima occorrenza di un byte in cui questi differiscano.
+
+\subsubsection{diff}
+\textit{diff} è come \textit{cmp}, ma mostra tutte le differenze tra i due file specificati in input.
+
+\subsubsection{patch}
+Essendo \textit{file1} e \textit{$ diff_file $} i due parametri in input,
+ ed essendo \textit{$ diff_file $} il file contenente l'output del comando \textit{diff} su due file \textit{file1} e \textit{file2}, \textit{patch} utilizza le informazioni della patch \textit{$ diff_file $} per trasformare il file in input \textit{file1} in \textit{file2}.
+
+\subsubsection{date}
+Senza argomenti, \textit{date} scrive la data e l'ora (con fuso orario). Con la flag \textit{-s} e il parametro \textit{data}, setta la data a \textit{data}. Con la flag \textit{+formato}, invece, è possibile specificare il formato di visualizzazione della data:
+\begin{itemize}
+	\item \textbf{\%F}: scrive la data come \textit{YYYY-MM-DD}, equivalente a \textit{\%Y-\%m-\%d};
+	\item \textbf{\%H}: scrive solo l'ora;
+	\item \textbf{\%M}: scrive solo i minuti;
+	\item \textbf{\%S}: scrive solo i secondi (con valore 60);
+	\item \textbf{\%N}: scrive solo i nanosecondi;
+	\item \textbf{\%s}: numero di secondi intercorso tra la mezzanotte in punto del \textit{1 Gennaio 1970} (circa l'accensione del primo Unix, giorno detto \textit{epoch});
+	\item \ldots
+\end{itemize}
+
+\subsubsection{find}
+Utilizzato per trovare file (+ effettuare azioni su di essi).
+Tre tipi di espressioni, da indicare in quest'ordine:
+\begin{itemize}
+	\item \textbf{opzioni}
+	\begin{itemize}
+		\item -maxdepth M, che impedisce di scendere per più di M subdirectories
+	\end{itemize}
+	\item \textbf{test} restituisce un file solo se il test effettuato sul file restituisce \textit{true}.
+	\begin{itemize}
+		\item -name title
+		\item -iname title, non case-sensitive
+		\item -type filetype, d sta per directory!
+		\item -size c [cwbkMG]
+		\item -user uname
+		\item -mode permessi
+		\item -regex pattern
+		\item -atime T, acceso al file 24T ore fa
+		\item -mtime T, modifica
+		\item -ctime T, modifica di metadata
+		\item -empty
+		\item -cnewer file, solo se è il più recente come data di modifica
+		\item -anewer file, solo se è il più recentemente acceduto
+		\item -
+	\end{itemize}
+	\item \textbf{azioni} da applicare ai file che superano i test
+\end{itemize}
+
+\subsubsection{id}
+\textit{id} stampa \textit{user id}, \textit{group id} e tutti i gruppi a cui appartiene l'utente specificato in input.
+
+\subsubsection{who}
+\textit{who} stampa l'utente correntemente loggato.
+
+\subsubsection{uptime}
+\textit{uptime} stampa da quanto tempo il sistema è stato avviato. Specificando la flag \textit{-p} mostra un output più leggibile.
+
+\subsubsection{whoami}
+\textit{whoami} stampa l'utente che si sta impersonando.
+
+\subsubsection{which}
+\textit{which} stampa la path del comando specificato in input - se esistente.
+
+\subsubsection{time}
+\textit{time} stampa le statistiche relative all'esecuzione - alla sua terminazione - di un comando specificato in input.

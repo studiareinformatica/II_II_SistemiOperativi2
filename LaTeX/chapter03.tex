@@ -70,14 +70,14 @@ Infine, \textit{\%+} o \textit{\%\%} selezionano l'ultimo job lanciato; \textit{
 
 \section{Comandi utili}
 
-\subsection{ps}
+\subsubsection{ps}
 \textit{ps} è un comando molto utile per la gestione dei processi.
 Mostra in output i processi attualmente in esecuzione, insieme con - se esplicitamente richiesto tramite le opzioni - diverse informazioni ad essi relative.
 
-\subsection{top}
+\subsubsection{top}
 \textit{top} è un comando - simile a \textit{ps} - che mostra \textit{interattivamente} e con refresh periodico - la tabella dei processi in esecuzione, insieme con statistiche sulla \textit{load average}, l'utilizzo della \textit{CPU}, della \textit{RAM} e della \textit{SWAP}, e diverse altre informazioni utili.
 
-\subsection{kill}
+\subsubsection{kill}
 \textit{kill} può essere utilizzato per \textit{uccidere} processi in esecuzione - praticamente in tutti gli stati possibili -, ma in realtà è un "lanciatore" di \textit{signals}.
 Prende in input il \textit{PID} del processo da uccidere. \\
 Se specificata la flag \textit{-l} mostra tutti i possibili segnali da lanciare. \\
@@ -87,15 +87,15 @@ kill -9 2617
 \end{lstlisting}
 invio il segnale \textit{SIGKILL} al processo con \textit{PID} \textit{2617}. 
 
-\subsection{nice}
+\subsubsection{nice}
 \textit{nice} utilizza due argomenti:
 \begin{itemize}
     \item valore (positivo o negativo): valore di priorità da utilizzare
     \item comando, al quale aggiungere (o diminuire, in base al valore del primo parametro) priorità
 \end{itemize}
 
-\subsection{renice}
+\subsubsection{renice}
 \textit{renice} è una versione di \textit{nice} applicabile su processi già in esecuzione, ed infatti richiede il suo \textit{PID} come argomento, in sostituzione del parametro di input \textit{comando}, nel caso di \textit{nice}.
 
-\subsection{strace}
+\subsubsection{strace}
 \textit{strace} mostra la \textit{stack trace} di un comando - richiesto come parametro di input. Alternativamente, può mostrare quella di un processo in esecuzione, tramite la flag \textit{-p} che richiede il \textit{PID} di tale processo.
