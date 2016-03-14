@@ -1,5 +1,4 @@
 Le espressioni regolari fanno parte dei linguaggi formali. Definiscono - come tutti i linguaggi formali - due informazioni fondamentali:la \textit{sintassi}, cioè la struttura grammaticale e sintattica di un'espressione regolare, e la \textit{semantica}, ossia le specifiche per la scrittura di ER ben formate.
-% cosa vuola dire \textit{scrivere bene} un'espressione regolare - che non soltanto rispetti le sue regole sintattiche.
 
 \section{Sintassi}
 Esistono due tipi di sintassi:
@@ -14,37 +13,34 @@ Esistono due tipi di sintassi:
 
 \paragraph{ERE.} Raggruppa gli stessi \textit{metacaratteri} del \textit{BRE}, aggiungendo i seguenti: \textit{+}, \textit{?}, \textit{|}, \textit{(}, \textit{)}, \textit{\{}, \textit{\}}. 
 
-Per essere corretta, le parentesi tonde devono essere sempre ben bilanciate. Per quanto riguarda invece le parentesi graffe, queste possono essere usate soltanto contenendo valori numerici interi positivi, separati da \textit{virgole}. Infine, il \textit{backslash} può essere utilizzato anche così: $\textbackslash n$, dove \textit{n} è un numero intero positivo.
+Per essere corretta, le parentesi tonde devono essere sempre ben bilanciate. Per quanto riguarda invece le parentesi graffe, queste possono essere usate soltanto contenendo valori numerici interi positivi, separati da \textit{virgole}. Infine, il \textit{backslash} può essere utilizzato anche così: \textbackslash n, dove \textit{n} è un numero intero positivo.
 
 \section{Semantica}
 \begin{center}
-	\textbf{BRE}\\
-	\begin{tabular}{|c|p{3cm}|p{10cm}|}
+	\captionof{table}{BRE} \label{tab:table-bre} 
+	\begin{tabular}{|p{3cm}|p{10cm}|}
 	\hline
-		\textbf{Num} & \textbf{Caratteri} & \textbf{Semantica: \textit{con cosa fa pattern matching}} \\ \hline
-		1	& Letterale \textit{l}	& Solo \textit{l} \\ \hline
-		2	& .			& Qualsiasi singolo carattere \\ \hline
-		3	& [S], dove S è una \textit{concatenazione} di caratteri dove non compare -, oppure compare solo all'inizio o alla fine	& Uno qualsiasi dei caratteri in S; se il primo carattere è \^, allora uno qualsiasi dei caratteri \textit{non} in S. \\ \hline
-		4	& [R], dove R è un range $ l_{1} - l_{2} $	& Uno qualsiasi dei letterali compresi nel range, quindi una qualsiasi $ l_{1} \leq l \leq l_{2} $; se il primo carattere di R è \^, allora uno qualsiasi dei caratteri \textit{non} in R. \\ \hline
-		5	& $ [M] $, dove M è un misto di sequenze $ S_{1},\ldots,S_{n} $ e di range $ R_{1},\ldots,R_{k}	$ & Uno qualsiasi dei caratteri che fanno pattern matching con una sequenza $ S_{i} $o con un range $ R_{j} $. Alcuni di questi M sono predefiniti da \textit{POSIX}. \\ \hline
-		6	& $ [^M] $, dove M è come sopra	& Uno qualsiasi dei caratteri che non fanno pattern matching con alcuna sequenza $ S_{i} $ né con un range $ R_{j} $. \\ \hline
-		7	& *			& Si può fare pattern matching con la sottoespressione regolare immediatamente precedente per 0, 1 o più volte (consecutive); però, se si trova all'inizio di una \textit{BRE}, diventa un letterale. \\ \hline
-		8	& $ [^] $		&
-		 Si può fare pattern matching con la sottoespressione regolare immediatamente seguente solo se la stringa che fa pattern matching si trova all'inizio del testo. \\ \hline
-		9	& \$			& Si può fare pattern matching con la sottoespressione regolare immediatamente precedente solo se la tringa che fa pattern matching si trova alla fine del testo. \\ \hline
-		10	& <			& Si può fare pattern matching con la sottoespressione regolare immediatamente seguente solo se la stringa che fa pattern matching si trova all'inizio di una parola (ovvero, dopo di alcuni spazi). \\ \hline
-		11	& >			& Si può fare pattern matching con la sottoespressione regolare immediatamente precedente solo se la stringa che fa pattern matching si trova alla fine di una parola (ovvero, prima di alcuni spazi). \\ \hline
-		12	& \textbackslash	& Se seguito da un metacarattere, forza a considerarlo come se fosse un letterale. \\ \hline
-		13	& $E_{1}E_{2}$		& Si può fare pattern matching con una string che fa 
-		pattern matching con $ E_{1} $ , concatenata (ovvero, seguita immediatamente da una che fa pattern matching con $ E_{2} $) .\\
-		 
-		 \hline
+		\textbf{Caratteri} & \textbf{Semantica: \textit{con cosa fa pattern matching}} \\ \hline
+		Letterale \textit{\textbf{l}}	& Solo \textit{l} \\ \hline
+		\textbf{.}			& Qualsiasi singolo carattere \\ \hline
+		\textbf{[S]}, dove S è una \textit{concatenazione} di caratteri dove non compare -, o compare all'inizio/fine	& Uno qualsiasi dei caratteri in S; se il primo carattere è \^, allora uno qualsiasi dei caratteri \textit{non} in S. \\ \hline
+		\textbf{[R]}, dove R è un range $ l_{1} - l_{2} $	& Uno qualsiasi dei letterali compresi nel range, quindi una qualsiasi $ l_{1} \leq l \leq l_{2} $; se il primo carattere di R è \^, allora uno qualsiasi dei caratteri \textit{non} in R. \\ \hline
+		\textbf{[M]}, dove M è un misto di sequenze $ S_{1},\ldots,S_{n} $ e di range $ R_{1},\ldots,R_{k} $   & Uno qualsiasi dei caratteri che fanno pattern matching con una sequenza $ S_{i} $o con un range $ R_{j} $. Alcuni di questi M sono predefiniti da \textit{POSIX}. \\ \hline
+		\textbf{[\^M]}, dove M è un misto di sequenze $ S_{1},\ldots,S_{n} $ e di range $ R_{1},\ldots,R_{k} $  & Uno qualsiasi dei caratteri che non fanno pattern matching con alcuna sequenza $ S_{i} $ né con un range $ R_{j} $. \\ \hline
+		\textbf{*}			& Si può fare pattern matching con la sottoespressione regolare immediatamente precedente per 0, 1 o più volte (consecutive); però, se si trova all'inizio di una \textit{BRE}, diventa un letterale. \\ \hline
+		\textbf{\^}		& Si può fare pattern matching con la sottoespressione regolare immediatamente seguente solo se la stringa che fa pattern matching si trova all'inizio del testo. \\ \hline
+		\textbf{\$}			& Si può fare pattern matching con la sottoespressione regolare immediatamente precedente solo se la tringa che fa pattern matching si trova alla fine del testo. \\ \hline
+		\textbf{$<$}			& Si può fare pattern matching con la sottoespressione regolare immediatamente seguente solo se la stringa che fa pattern matching si trova all'inizio di una parola (ovvero, dopo di alcuni spazi). \\ \hline
+		\textbf{$>$}			& Si può fare pattern matching con la sottoespressione regolare immediatamente precedente solo se la stringa che fa pattern matching si trova alla fine di una parola (ovvero, prima di alcuni spazi). \\ \hline
+		\textbf{\textbackslash}	& Se seguito da un metacarattere, forza a considerarlo come se fosse un letterale. \\ \hline
+		\textbf{$E_{1}E_{2}$}		& Si può fare pattern matching con una string che fa 
+		pattern matching con $ E_{1} $ , concatenata (ovvero, seguita immediatamente da una che fa pattern matching con $ E_{2} $) .\\ \hline
 	\end{tabular}
 \end{center}
 \newpage
 \begin{center}
-	\textbf{Standard POSIX} \\
-	\begin{tabular}{|c|l|l|}
+	\captionof{table}{Standard POSIX} \label{tab:table-posix} 
+	\begin{tabular}{|l|l|}
 	\hline
 		\textbf{Classe} & \textbf{Semantica: \textit{con cosa fa pattern matching}} \\ \hline
 		[:alnum:]	& Come la BRE A-Za-z0-9 \\ \hline
@@ -61,18 +57,18 @@ Per essere corretta, le parentesi tonde devono essere sempre ben bilanciate. Per
 \end{center}
 
 \begin{center}
-	\textbf{ERE} \\
-	\begin{tabular}{|c|c|p{10cm}|}
+	\captionof{table}{ERE} \label{tab:table-ere} 
+	\begin{tabular}{|l|p{10cm}|}
 	\hline
-        \textbf{Num} & \textbf{Caratteri} & \textbf{Semantica: \textit{con cosa fa pattern matching}} \\ \hline
-		1	& +		& Si può fare pattern matching con la sottoespressione regolare immediatamente precedente per 1 o più volte (consecutive). \\ \hline
-		2	& ?		& Si può fare pattern matching con la sottoespressione regolare immediatamente precedente per 0 o 1 volta. \\ \hline
-		3	& l & va applicato a 2 espressioni regolari $ E_{1} $ ed $ E_{2} $(notazione infissa, quindi si scrive $ E_{1}|E_{2} $). Si può fare pattern matching con $ E_{1} $ o con $ E_{2} $. \\ \hline
-		4	& (E)		& Si può fare pattern matching con E: utile se occorre sovvertire le precedenze (nelle ERE, la concatenzazione ha la precedenza sul |) \\ \hline
-		5	& $ \backslash n $		& Esattamente la stessa sottostringa che ha fatto match con l'$ n $-esima sottoespressione regolare tra parentesi. \\ \hline
-		6	& {n}		& Si deve fare pattern matching con la sottoespressione regolare immediatamente precedente per esattamente \textit{n} volte (consecutive). \\ \hline
-		7	& {n,}		& Si deve fare pattern matching con la sottoespressione regolare immediatamente precedente per almeno \textit{n} volte (consecutive). \\ \hline
-		8	& {n,m}		& Si deve fare pattern matching con la sottoespressione regolare immediatamente precedente per almeno \textit{n} volte e per al più \textit{m} volte (consecutive). \\ \hline
+        \textbf{Caratteri} & \textbf{Semantica: \textit{con cosa fa pattern matching}} \\ \hline
+		+		& Si può fare pattern matching con la sottoespressione regolare immediatamente precedente per 1 o più volte (consecutive). \\ \hline
+		?		& Si può fare pattern matching con la sottoespressione regolare immediatamente precedente per 0 o 1 volta. \\ \hline
+		l & va applicato a 2 espressioni regolari $ E_{1} $ ed $ E_{2} $(notazione infissa, quindi si scrive $ E_{1}|E_{2} $). Si può fare pattern matching con $ E_{1} $ o con $ E_{2} $. \\ \hline
+		(E)		& Si può fare pattern matching con E: utile se occorre sovvertire le precedenze (nelle ERE, la concatenzazione ha la precedenza sul |) \\ \hline
+		$ \backslash n $		& Esattamente la stessa sottostringa che ha fatto match con l'$ n $-esima sottoespressione regolare tra parentesi. \\ \hline
+		{n}		& Si deve fare pattern matching con la sottoespressione regolare immediatamente precedente per esattamente \textit{n} volte (consecutive). \\ \hline
+		{n,}		& Si deve fare pattern matching con la sottoespressione regolare immediatamente precedente per almeno \textit{n} volte (consecutive). \\ \hline
+		{n,m}		& Si deve fare pattern matching con la sottoespressione regolare immediatamente precedente per almeno \textit{n} volte e per al più \textit{m} volte (consecutive). \\ \hline
 	\end{tabular}		
 \end{center}
 \newpage
@@ -156,19 +152,19 @@ Tre tipi di espressioni, da indicare in quest'ordine:
 	\item \textbf{test} restituisce un file solo se il test effettuato sul file restituisce \textit{true}.
 	\begin{itemize}
 		\item -name title
-		\item -iname title, non case-sensitive
-		\item -type filetype, d sta per directory!
+		\item -iname title, non case-sensitive;
+		\item -type filetype (d=directory, f=file, \ldots);
 		\item -size c [cwbkMG]
 		\item -user uname
 		\item -mode permessi
 		\item -regex pattern
-		\item -atime T, acceso al file 24T ore fa
-		\item -mtime T, modifica
-		\item -ctime T, modifica di metadata
+		\item -atime T, accesso al file 24T ore fa;
+		\item -mtime T, modifica al file 24T ore fa;
+		\item -ctime T, modifica di metadata al file 24T ore fa;
 		\item -empty
-		\item -cnewer file, solo se è il più recente come data di modifica
-		\item -anewer file, solo se è il più recentemente acceduto
-		\item -
+		\item -cnewer file, solo se è il più recente come data di modifica;
+		\item -anewer file, solo se è il più recentemente acceduto;
+		\item \ldots
 	\end{itemize}
 	\item \textbf{azioni} da applicare ai file che superano i test
 \end{itemize}
@@ -190,3 +186,19 @@ Tre tipi di espressioni, da indicare in quest'ordine:
 
 \subsubsection{time}
 \textit{time} stampa le statistiche relative all'esecuzione - alla sua terminazione - di un comando specificato in input.
+
+\subsubsection{awk}
+\textit{awk} (o \textit{gawk}, più recente) elabora file di testo. Scritto in un linguaggio molto vicino al \textit{C}. Il comando divide un input in righe, per ciascuna applica uno \textit{statement} e - se vero - esegue un comando. È strutturato secondo una sequenza di direttive del tipo:
+\begin{lstlisting}
+condizioni { azioni }
+\end{lstlisting}
+Un esempio di manipolazione semplice tramite il comando:
+\begin{lstlisting}
+input="stringa"
+echo $input | awk '/str*a/' '{print $1}'
+\end{lstlisting}
+Il precedente esempio stamperà la stringa \textit{ciao}, che sarà utilizzata come input per \textit{awk}, il quale applicherà la condizione che la stringa rispetti la \textit{regex} \textit{/str*a/}: una volta verificato che la rispetta, la stamperà.
+\begin{lstlisting}
+echo "stringa1 stringa2 stringa3" | awk '/str*a{1,2}/' '{print "$1 $2}'
+\end{lstlisting}
+Questo esempio invece verificherà che la stringa \textit{"stringa1 stringa2 stringa3"} rispetti la \textit{regex} \textit{/str*a\{1,2\}/} ed in quel caso, stamperà soltanto le prime due componenti di uno split per spazi sulla stringa in input.
