@@ -17,7 +17,7 @@ Per essere corretta, le parentesi tonde devono essere sempre ben bilanciate. Per
 
 \section{Semantica}
 \begin{center}
-	\captionof{table}{BRE} \label{tab:table-bre} 
+    \captionof{BRE} \label{tab:table-bre}
 	\begin{tabular}{|p{3cm}|p{10cm}|}
 	\hline
 		\textbf{Caratteri} & \textbf{Semantica: \textit{con cosa fa pattern matching}} \\ \hline
@@ -39,7 +39,7 @@ Per essere corretta, le parentesi tonde devono essere sempre ben bilanciate. Per
 \end{center}
 \newpage
 \begin{center}
-	\captionof{table}{Standard POSIX} \label{tab:table-posix} 
+    \captionof{Standard POSIX} \label{tab:table-posix}
 	\begin{tabular}{|l|l|}
 	\hline
 		\textbf{Classe} & \textbf{Semantica: \textit{con cosa fa pattern matching}} \\ \hline
@@ -57,7 +57,7 @@ Per essere corretta, le parentesi tonde devono essere sempre ben bilanciate. Per
 \end{center}
 
 \begin{center}
-	\captionof{table}{ERE} \label{tab:table-ere} 
+	\captionof{ERE} \label{tab:table-ere}
 	\begin{tabular}{|l|p{10cm}|}
 	\hline
         \textbf{Caratteri} & \textbf{Semantica: \textit{con cosa fa pattern matching}} \\ \hline
@@ -201,4 +201,51 @@ Il precedente esempio stamperà la stringa \textit{ciao}, che sarà utilizzata c
 \begin{lstlisting}
 echo "stringa1 stringa2 stringa3" | awk '/str*a{1,2}/' '{print "$1 $2}'
 \end{lstlisting}
-Questo esempio invece verificherà che la stringa \textit{"stringa1 stringa2 stringa3"} rispetti la \textit{regex} \textit{/str*a\{1,2\}/} ed in quel caso, stamperà soltanto le prime due componenti di uno split per spazi sulla stringa in input.
+Questo esempio invece verificherà che la stringa \textit{"stringa1 stringa2 stringa3"} rispetti la \textit{regex} \textit{/str*a\{1,2\}/} ed in quel caso, stamperà soltanto le prime due componenti di uno split per spazi sulla stringa in input. \\
+Inoltre è possibile utilizzare variabili personalizzate:
+\begin{lstlisting}
+echo "stringa1 stringa2 stringa3" |
+    awk '{variabile1 = $1;
+    variabile2 = $3;
+    variabilefinale = variabile1 " " variabile;
+    print variabilefinale}'
+\end{lstlisting}
+In questo modo, assoceremo alla variabile \textit{variabilefinale} la concatenazione delle stringhe:
+\begin{itemize}
+    \item \textit{stringa1}, che - essendo parte della prima colonna - viene associata alla variabile \textit{variabile1};
+    \item la stringa contenente un solo spazio: " ";
+    \item \textit{stringa3}, che - essendo parte della terza colonna - viene associata alla variabile \textit{variabile2}.
+\end{itemize}
+Infine, il \textit{print variabilefinale} stamperà questa concatenazione. \\
+Ancora, supporta anche i \textit{for}:
+\begin{lstlisting}
+awk '{variabile["stringa"] = 3;
+    for (key in variabile) print key, variabile[key]}'
+\end{lstlisting}
+In questo caso inzializiamo una mappa \textit{variabile}, contenente soltanto la chiave \textit{"stringa"} associata al valore \textit{3}. Iterando sulla mappa, facciamo un \textit{print} di ciascuna coppia di chiave-valore.
+
+\subsubsection{sed}
+\textit{sed} è una versione molto più semplificata di \textit{awk}, che agisce su righe non splittate. Con \textit{sed} inoltre, non vengono utilizzati programmi - come possibile con \textit{awk} -, ma azioni molto più semplici. \\
+Lavora con espressioni regolari:
+\begin{itemize}
+    \item \textbf{r filename}: appena il contenuto di \textit{filename} alla fine della riga;
+    \item \textbf{/regex/d}: rimuove le righe contenenti \textit{regex};
+    \item \textbf{i$\backslash$riga}: inserisce \textit{riga} prima della riga;
+    \item \textbf{a$\backslash$riga}: inserisce \textit{riga} alla fine della riga;
+    \item \textbf{c$\backslash$riga}: sostituisce \textit{riga} alla riga;
+    \item \textbf{s/regex/repl/}: sostituisce la prima - e più grande - corrispondenza di \textit{regex} con \textit{repl} nella riga;
+    \item \textbf{s/regex/repl/g}: sostituisce tutte le più grandi occorrenze di \textit{regex} con \textit{repl} nella riga;
+\end{itemize}
+
+\subsubsection{tr}
+Con \textit{tr} si possono soltanto trasformare/rimuovere caratteri in una stringa. Prende come parametri due sequenze di caratteri: sostituisce la lettera in posizione \textit{n} della prima sequenza, con la lettera in posizione \textit{n} della seconda. Se la prima prima sequenza è più lunga della seconda, viene estesa la seconda con l'ultimo carattere fino a raggiungere la lunghezza della prima. Con la flag \textit{-t} viene considerata la sequenza soltanto fino alla lunghezza in comune. \\
+Con la flag \textit{-d}, invece di trasformare, rimuove i caratteri presenti nella prima sequenza in input.
+
+\subsubsection{uniq}
+\textit{uniq} unifica tutte le righe identiche.
+
+\subsubsection{sort}
+\textit{sort} esegue un ordinamento \textit{lessicografico} (vengono prima le cifre, poi i caratteri minuscoli e infine quelli maiuscoli) per riga dell'input da file/tastiera. Se le righe contengono numeri e si vuole che vengano interpretate come tali, si deve aggiungere la flag \textit{-n}.
+
+\subsubsection{wc}
+\textit{wc} prende in input da file/tastiera e ne stampa alcune statistiche, ovvero il numero di righe (\textit{-l}), di parole (\textit{-w}) e di caratteri (\textit{-c}).
