@@ -1,0 +1,47 @@
+\section{Informazioni generali}
+Esistono diveri tipi:
+\begin{itemize}
+	\item Shell di login con autenticazione: e.g. \textit{bash -l}, \textit{ssh localhost};
+	\item Shell di login senza autenticazione: e.g. \textit{CTRL+ALT+Fn}, \textit{ssh UTENTE@localhost}, \textit{su - UTENTE}, \textit{su -l UTENTE};
+	\item Shell interattive: e.g. \textit{bash};
+	\item Shell non interattive: e.g. \textit{bash FILE}, \textit{bash -l FILE};
+	\item Sottoshell.
+\end{itemize}
+Per quanto riguarda \textit{bash}, esistono dei file di configurazione ad esso relativi, caricati automaticamente al suo avvio:
+\begin{itemize}
+	\item \textbf{system-wide}: e.g. \textit{/etc/profile};
+	\item \textbf{user}: e.g. \textit{~/.bashrc}.
+\end{itemize}
+
+\subsection{Shell principali}
+Tra le shell più importanti troviamo:
+\begin{itemize}
+	\item \textit{sh}, o \textit{Bourne shell} (nota dall'utilizzo del carattere \$ per denotare le variabili);
+	\item \textit{csh}, o \textit{C-Shell} (nota dall'utilizzo del carattere \% per denotare le variabili);
+	\item \textit{bash}, o \textit{Bourne-Again SHell};
+\end{itemize}
+
+\subsection{Parentesi}
+L'utilizzo delle parentesi nella riga di comando della shell porta a esiti diversi. \\
+Innanzitutto, le parentesi tonde sono \textit{metacaratteri}, mentre le parentesi quadre sono vere e proprie \textit{keywords}. Come in tanti altri linguaggi, le parentesi tonde danno una gerarchia al comando, dividendono il sottocomandi. Inoltre, se vengono dati più comandi entro le parentesi tonde, questi vengono lanciati in una nuova (sotto)shell. \\
+Le parentesi quadre, in \textit{bash}, assumono le connotazioni delle liste e/o array.
+
+\subsection{Codici di uscita}
+Gli \textit{exit code} sono i codici di uscita di un dato comando, genericamente compresi tra \textit{0} e \textit{255}. Lo \textit{0} indica che il comando si è concluso correttamente. Se il comando non è riconosciuto, il codice è \textit{127}. Se un comando è costruito su una sequenza di comandi, il suo \textit{exit code} sarà l'\textit{exit code} dell'ultimo comando eseguito nella sequenza. \\
+L'\textit{exit code} di un comando viene archiviato nella variabile \textit{\$?}, una volta terminato.
+
+\subsection{Esecuzione condizionale}
+L'esecuzione condizionale si compone con l'utilizzo dei caratteri \textit{\&} e \textit{|}:
+\begin{itemize}
+	\item \textbf{comando1 \&\& comando2}: \textit{comando2} viene eseguito se e solo se \textit{comando1} viene eseguito correttamente;
+	\item \textbf{comando1 || comando2}: \textit{comando2} viene eseguito se e solo se \textit{comando1} non viene eseguito correttamente.
+\end{itemize}
+
+\subsection{Stream}
+Ad ogni processo, alla sua creazione, vengono associati tre \textit{stream}:
+\begin{itemize}
+	\item \textbf{stdin} (o \textit{standard input}): di default, input da tastiera (ha \textit{file descriptor} \textit{0}. Attraverso la \textit{pipelining} si può redirigere lo \textit{stdout} di un comando a \textit{stdin} di un altro);
+	\item \textbf{stdout} (o \textit{standard output}): di default, output su shell (ha \textit{file descriptor} \textit{1}: \textit{comando1 1> /dev/null} per redirigere lo \textit{stdout} del \textit{comando1} su \textit{/dev/null});
+	\item \textbf{stderr} (o \textit{standard error}): di default, error su shell (ha \textit{file descriptor} \textit{2}: \textit{comando1 2> /dev/null} per redirigere lo \textit{stderr} del \textit{comando1} su \textit{/dev/null}).
+\end{itemize}
+Ciascuno \textit{stream} può essere rediretto tramite il suo \textit{file descriptor}. Se omesso, si sottintende l'\textit{1}.
