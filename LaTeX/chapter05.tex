@@ -34,14 +34,15 @@ L'\textit{exit code} di un comando viene archiviato nella variabile \textit{\$?}
 L'esecuzione condizionale si compone con l'utilizzo dei caratteri \textit{\&} e \textit{|}:
 \begin{itemize}
 	\item \textbf{comando1 \&\& comando2}: \textit{comando2} viene eseguito se e solo se \textit{comando1} viene eseguito correttamente;
-	\item \textbf{comando1 || comando2}: \textit{comando2} viene eseguito se e solo se \textit{comando1} non viene eseguito correttamente.
+	\item \textbf{comando1 $\mid\mid$ comando2}: \textit{comando2} viene eseguito se e solo se \textit{comando1} non viene eseguito correttamente.
 \end{itemize}
 
 \subsection{Stream}
 Ad ogni processo, alla sua creazione, vengono associati tre \textit{stream}:
 \begin{itemize}
 	\item \textbf{stdin} (o \textit{standard input}): di default, input da tastiera (ha \textit{file descriptor} \textit{0}. Attraverso la \textit{pipelining} si può redirigere lo \textit{stdout} di un comando a \textit{stdin} di un altro);
-	\item \textbf{stdout} (o \textit{standard output}): di default, output su shell (ha \textit{file descriptor} \textit{1}: \textit{comando1 1> /dev/null} per redirigere lo \textit{stdout} del \textit{comando1} su \textit{/dev/null});
-	\item \textbf{stderr} (o \textit{standard error}): di default, error su shell (ha \textit{file descriptor} \textit{2}: \textit{comando1 2> /dev/null} per redirigere lo \textit{stderr} del \textit{comando1} su \textit{/dev/null}).
+	\item \textbf{stdout} (o \textit{standard output}): di default, output su shell (ha \textit{file descriptor} \textit{1}: \textit{comando1 1$>$ /dev/null} per redirigere lo \textit{stdout} del \textit{comando1} su \textit{/dev/null});
+	\item \textbf{stderr} (o \textit{standard error}): di default, error su shell (ha \textit{file descriptor} \textit{2}: \textit{comando1 2$>$ /dev/null} per redirigere lo \textit{stderr} del \textit{comando1} su \textit{/dev/null}).
 \end{itemize}
 Ciascuno \textit{stream} può essere rediretto tramite il suo \textit{file descriptor}. Se omesso, si sottintende l'\textit{1}.
+
